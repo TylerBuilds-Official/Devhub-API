@@ -74,9 +74,8 @@ async def get_job(deploy_id: str, request: Request) -> JobDetail:
     upstream: dict = {}
 
     try:
-        upstream      = await client.get_job(record.upstream_job_id)
-        new_status    = reconcile(record, upstream)
-        record.status = new_status
+        upstream = await client.get_job(record.upstream_job_id)
+        reconcile(record, upstream)    # mutates record in place
 
     except Exception as e:
         # Upstream may legitimately not have the job (e.g., job cache

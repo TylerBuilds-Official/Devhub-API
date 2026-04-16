@@ -16,6 +16,6 @@ def register_all_routes(app: FastAPI, routers: list[APIRouter]) -> None:
 
     for r in routers:
         app.include_router(r)
-        logger.info(f"Registered router  tags={r.tags}")
+        logger.info(f"Registered router tags={r.tags}")
 
     logger.info(f"Registered {len(routers)} routers")

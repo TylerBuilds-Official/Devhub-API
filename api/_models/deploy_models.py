@@ -7,6 +7,8 @@ the upstream job_id.
 """
 from pydantic import BaseModel, Field
 
+from api._models.job_models import JobStatus
+
 
 class DeployRequest(BaseModel):
     """Deploy trigger request."""
@@ -23,4 +25,4 @@ class DeployResponse(BaseModel):
     upstream_job_id: str
     project_key:     str
     pipeline_key:    str
-    status:          str
+    status:          JobStatus

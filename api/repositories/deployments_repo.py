@@ -30,7 +30,8 @@ class DeploymentsRepo:
             pipeline_key:    str,
             upstream_job_id: str,
             triggered_by:    int | None,
-            params:          dict ) -> UUID:
+            params:          dict,
+            status:          str = "queued" ) -> UUID:
         """Insert a new deployment row; returns the generated DeployId."""
 
         params_json = json.dumps(params) if params else None
@@ -41,7 +42,7 @@ class DeploymentsRepo:
                 ParamsJson, Status
             )
             OUTPUT inserted.DeployId
-            VALUES (?, ?, ?, ?, ?, 'queued');
+            VALUES (?, ?, ?, ?, ?, ?);
         """
 
         with get_connection() as conn:
@@ -49,7 +50,7 @@ class DeploymentsRepo:
             cur.execute(
                 sql,
                 project_key, pipeline_key, upstream_job_id, triggered_by,
-                params_json,
+                params_json, status,
             )
             row = cur.fetchone()
             conn.commit()
@@ -99,29 +100,6 @@ class DeploymentsRepo:
         with get_connection() as conn:
             cur = conn.cursor()
             cur.execute(sql, str(deploy_id))
-            row = cur.fetchone()
-
-        if row is None:
-            return None
-
-        return _row_to_record(row)
-
-
-    @staticmethod
-    def get_by_upstream_job_id(upstream_job_id: str) -> DeployRecord | None:
-        """Look up a single deployment row by its upstream job_id."""
-
-        sql = """
-            SELECT DeployId, ProjectKey, PipelineKey, UpstreamJobId, TriggeredBy,
-                   ParamsJson, Status, StartedAt, FinishedAt, ExitCode,
-                   LogPointer, ErrorMessage
-            FROM   dev_hub.Deployments
-            WHERE  UpstreamJobId = ?;
-        """
-
-        with get_connection() as conn:
-            cur = conn.cursor()
-            cur.execute(sql, upstream_job_id)
             row = cur.fetchone()
 
         if row is None:

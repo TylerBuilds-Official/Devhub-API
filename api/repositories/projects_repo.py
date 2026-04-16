@@ -87,16 +87,3 @@ class ProjectsRepo:
             conn.commit()
 
         return rows
-
-
-    @staticmethod
-    def exists(project_key: str) -> bool:
-        """Return True if the project is present and active."""
-
-        sql = "SELECT 1 FROM dev_hub.Projects WHERE ProjectKey = ? AND IsActive = 1;"
-
-        with get_connection() as conn:
-            cur = conn.cursor()
-            cur.execute(sql, project_key)
-
-            return cur.fetchone() is not None

@@ -9,14 +9,6 @@ class ProjectError(Exception):
     """Base class for all project/registry errors."""
 
 
-class UnknownProjectError(ProjectError):
-    """The requested project key is not in the registry."""
-
-    def __init__(self, key: str):
-        self.key = key
-        super().__init__(f"Unknown project: {key}")
-
-
 class RegistryLoadError(ProjectError):
     """registry.json failed to load or parse."""
 

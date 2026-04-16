@@ -74,15 +74,6 @@ class UpdateSuiteClient:
         return r.json()
 
 
-    async def list_jobs(self) -> dict:
-        """GET /jobs — recent upstream jobs."""
-
-        r = await self._client.get("/jobs")
-        r.raise_for_status()
-
-        return r.json()
-
-
     async def close(self) -> None:
         """Dispose of the underlying httpx client."""
 

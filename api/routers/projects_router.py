@@ -36,17 +36,18 @@ def _serialize(entry: ProjectEntry, health: HealthSnapshot | None) -> ProjectInf
     """Convert a ProjectEntry dataclass into its API-facing model."""
 
     return ProjectInfo(
-        key             = entry.key,
-        display_name    = entry.display_name,
-        description     = entry.description,
-        category        = entry.category,
-        repo            = entry.repo,
-        health_url      = entry.health_url,
-        verify_tls      = entry.verify_tls,
-        updatesuite_app = entry.updatesuite_app,
-        tags            = entry.tags,
-        docs_paths      = entry.docs_paths,
-        health          = _to_health(health),
+        key                = entry.key,
+        display_name       = entry.display_name,
+        description        = entry.description,
+        category           = entry.category,
+        repo               = entry.repo,
+        health_url         = entry.health_url,
+        health_interval_s  = entry.health_interval_s,
+        verify_tls         = entry.verify_tls,
+        updatesuite_app    = entry.updatesuite_app,
+        tags               = entry.tags,
+        docs_paths         = entry.docs_paths,
+        health             = _to_health(health),
     )
 
 

@@ -121,33 +121,3 @@ class HealthRepo:
             )
             for r in rows
         }
-
-
-    @staticmethod
-    def get_history(project_key: str, limit: int = 100) -> list[HealthSnapshot]:
-        """Return recent probe history for a project, newest first."""
-
-        sql = """
-            SELECT TOP (?)
-                   ProjectKey, Status, LatencyMs, StatusCode, CheckedAt, Error
-            FROM   dev_hub.HealthHistory
-            WHERE  ProjectKey = ?
-            ORDER BY CheckedAt DESC;
-        """
-
-        with get_connection() as conn:
-            cur = conn.cursor()
-            cur.execute(sql, limit, project_key)
-            rows = cur.fetchall()
-
-        return [
-            HealthSnapshot(
-                project_key = r[0],
-                status      = r[1],
-                latency_ms  = r[2],
-                status_code = r[3],
-                checked_at  = r[4],
-                error       = r[5],
-            )
-            for r in rows
-        ]

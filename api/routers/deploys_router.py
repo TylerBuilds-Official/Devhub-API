@@ -56,6 +56,7 @@ async def trigger_deploy(payload: DeployRequest, request: Request) -> DeployResp
         upstream_job_id = upstream_job_id,
         triggered_by    = None,              # will be AD user id once auth lands
         params          = payload.params,
+        status          = status,
     )
 
     return DeployResponse(

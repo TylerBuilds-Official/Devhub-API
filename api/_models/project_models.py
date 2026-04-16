@@ -2,11 +2,16 @@
 Pydantic models for the GET /projects endpoints.
 """
 from datetime import datetime
+from typing   import Literal
+
 from pydantic import BaseModel
 
 
+HealthStatus = Literal["up", "degraded", "down"]
+
+
 class ProjectHealth(BaseModel):
-    status:      str
+    status:      HealthStatus
     latency_ms:  int | None      = None
     status_code: int | None      = None
     checked_at:  datetime | None = None
@@ -14,17 +19,18 @@ class ProjectHealth(BaseModel):
 
 
 class ProjectInfo(BaseModel):
-    key:             str
-    display_name:    str
-    description:     str
-    category:        str
-    repo:            str | None           = None
-    health_url:      str | None           = None
-    verify_tls:      bool                 = True
-    updatesuite_app: str | None           = None
-    tags:            list[str]            = []
-    docs_paths:      list[str]            = []
-    health:          ProjectHealth | None = None
+    key:                str
+    display_name:       str
+    description:        str
+    category:           str
+    repo:               str | None           = None
+    health_url:         str | None           = None
+    health_interval_s:  int | None           = None
+    verify_tls:         bool                 = True
+    updatesuite_app:    str | None           = None
+    tags:               list[str]            = []
+    docs_paths:         list[str]            = []
+    health:             ProjectHealth | None = None
 
 
 class ProjectsResponse(BaseModel):
