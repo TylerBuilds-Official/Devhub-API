@@ -157,3 +157,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+### DevHub local-only
+# Fake log files used during dev to preview the logs UI without hitting
+# the Aegis VM. Safe to delete at any time.
+/test_logs/

@@ -19,6 +19,9 @@ from api._models.system_models  import (
     SystemStatus,
     UpstreamCheck,
 )
+from api._models.log_models     import (
+    LogsResponse,
+)
 
 
 __all__ = [
@@ -33,4 +36,5 @@ __all__ = [
     "JobLogResponse",
     "SystemStatus",
     "UpstreamCheck",
+    "LogsResponse",
 ]

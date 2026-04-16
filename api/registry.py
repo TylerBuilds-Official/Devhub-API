@@ -51,6 +51,7 @@ def load_registry(path: Path = REGISTRY_PATH) -> dict[str, ProjectEntry]:
                 updatesuite_app   = entry.get("updatesuite_app"),
                 tags              = entry.get("tags", []),
                 docs_paths        = entry.get("docs_paths", []),
+                logs              = entry.get("logs"),
             )
         except KeyError as e:
             raise RegistryLoadError(str(path), f"entry missing required field: {e}") from e

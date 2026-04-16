@@ -47,6 +47,7 @@ def _serialize(entry: ProjectEntry, health: HealthSnapshot | None) -> ProjectInf
         updatesuite_app    = entry.updatesuite_app,
         tags               = entry.tags,
         docs_paths         = entry.docs_paths,
+        logs               = entry.logs,
         health             = _to_health(health),
     )
 

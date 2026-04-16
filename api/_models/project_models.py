@@ -23,14 +23,15 @@ class ProjectInfo(BaseModel):
     display_name:       str
     description:        str
     category:           str
-    repo:               str | None           = None
-    health_url:         str | None           = None
-    health_interval_s:  int | None           = None
-    verify_tls:         bool                 = True
-    updatesuite_app:    str | None           = None
-    tags:               list[str]            = []
-    docs_paths:         list[str]            = []
-    health:             ProjectHealth | None = None
+    repo:               str | None                       = None
+    health_url:         str | None                       = None
+    health_interval_s:  int | None                       = None
+    verify_tls:         bool                             = True
+    updatesuite_app:    str | None                       = None
+    tags:               list[str]                        = []
+    docs_paths:         list[str]                        = []
+    logs:               dict[str, dict[str, str]] | None = None
+    health:             ProjectHealth | None             = None
 
 
 class ProjectsResponse(BaseModel):

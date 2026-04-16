@@ -10,7 +10,17 @@
       "verify_tls": false,
       "updatesuite_app": "fabcore",
       "tags": ["production"],
-      "docs_paths": []
+      "docs_paths": [],
+      "logs": {
+        "api": {
+          "stdout": "E:\\Services\\Fabcore\\API\\logs\\stdout.log",
+          "stderr": "E:\\Services\\Fabcore\\API\\logs\\stderr.log"
+        },
+        "frontend": {
+          "stdout": "E:\\Services\\Fabcore\\Frontend\\logs\\stdout.log",
+          "stderr": "E:\\Services\\Fabcore\\Frontend\\logs\\stderr.log"
+        }
+      }
     },
     {
       "key": "scope_analysis",
@@ -22,7 +32,17 @@
       "verify_tls": false,
       "updatesuite_app": "scope_analysis",
       "tags": ["production"],
-      "docs_paths": []
+      "docs_paths": [],
+      "logs": {
+        "api": {
+          "stdout": "E:\\Services\\ScopeAnalysis\\API\\logs\\stdout.log",
+          "stderr": "E:\\Services\\ScopeAnalysis\\API\\logs\\stderr.log"
+        },
+        "frontend": {
+          "stdout": "E:\\Services\\ScopeAnalysis\\Frontend\\logs\\stdout.log",
+          "stderr": "E:\\Services\\ScopeAnalysis\\Frontend\\logs\\stderr.log"
+        }
+      }
     },
     {
       "key": "auto_estimate",
@@ -77,7 +97,13 @@
       "health_url": "http://localhost:8766/health",
       "updatesuite_app": null,
       "tags": ["infra"],
-      "docs_paths": []
+      "docs_paths": [],
+      "logs": {
+        "api": {
+          "stdout": "D:\\Projects\\PyCharmProjects\\Global APIs\\DevHubAPI\\test_logs\\stdout.log",
+          "stderr": "D:\\Projects\\PyCharmProjects\\Global APIs\\DevHubAPI\\test_logs\\stderr.log"
+        }
+      }
     }
   ]
 }
