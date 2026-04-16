@@ -9,11 +9,9 @@ __pycache__/
 
 .idea/
 test_main.http
-resources/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/

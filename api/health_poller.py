@@ -8,10 +8,10 @@ so the dashboard can read current status in O(projects).
 Architecture:
   - One supervisor asyncio.Task owned by lifespan.
   - For each project with a health_url, one child task loops on that
-    project's cadence.
+    project's cadence with its own httpx.AsyncClient (so verify_tls
+    can vary per project).
   - Cadence resolves per project: project.health_interval_s if set,
     else DEVHUB_HEALTH_INTERVAL_S from env, else DEFAULT_INTERVAL_S.
-  - A shared httpx.AsyncClient is used across all probes.
 
 Probe classification:
   - 2xx              → "up"
@@ -127,25 +127,29 @@ async def _probe_once(client: AsyncClient, project: ProjectEntry) -> HealthSnaps
         )
 
 
-async def _project_loop(client: AsyncClient, project: ProjectEntry) -> None:
+async def _project_loop(project: ProjectEntry) -> None:
     """Probe a single project forever on its resolved cadence."""
 
     interval = _resolve_interval(project)
 
-    logger.info(f"Health poller: {project.key} every {interval}s → {project.health_url}")
+    logger.info(
+        f"Health poller: {project.key} every {interval}s → "
+        f"{project.health_url} (verify_tls={project.verify_tls})"
+    )
 
-    while True:
-        try:
-            snapshot = await _probe_once(client, project)
-            HealthRepo.record(snapshot)
+    async with AsyncClient(verify=project.verify_tls) as client:
+        while True:
+            try:
+                snapshot = await _probe_once(client, project)
+                HealthRepo.record(snapshot)
 
-        except asyncio.CancelledError:
-            raise
+            except asyncio.CancelledError:
+                raise
 
-        except Exception:
-            logger.exception(f"Health poller tick failed for {project.key}")
+            except Exception:
+                logger.exception(f"Health poller tick failed for {project.key}")
 
-        await asyncio.sleep(interval)
+            await asyncio.sleep(interval)
 
 
 async def run_poller() -> None:
@@ -164,21 +168,20 @@ async def run_poller() -> None:
         f"(global default {_global_interval()}s)"
     )
 
-    async with AsyncClient() as client:
-        tasks = [
-            asyncio.create_task(_project_loop(client, p), name=f"health:{p.key}")
-            for p in probeable
-        ]
+    tasks = [
+        asyncio.create_task(_project_loop(p), name=f"health:{p.key}")
+        for p in probeable
+    ]
 
-        try:
-            await asyncio.gather(*tasks)
+    try:
+        await asyncio.gather(*tasks)
 
-        except asyncio.CancelledError:
-            logger.info("Health poller: shutdown signal received")
+    except asyncio.CancelledError:
+        logger.info("Health poller: shutdown signal received")
 
-            for t in tasks:
-                t.cancel()
+        for t in tasks:
+            t.cancel()
 
-            await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
-            raise
+        raise

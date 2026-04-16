@@ -1,0 +1,83 @@
+{
+  "projects": [
+    {
+      "key": "fabcore",
+      "display_name": "FabCore",
+      "description": "MFC internal AI platform — chat, data visualization, and workflow tools. FastAPI backend + React frontend + ToolboxAgent executor.",
+      "category": "service",
+      "repo": "TylerBuilds-Official/MFC-Toolbox-API",
+      "health_url": "https://10.0.0.12:6001/",
+      "verify_tls": false,
+      "updatesuite_app": "fabcore",
+      "tags": ["production"],
+      "docs_paths": []
+    },
+    {
+      "key": "scope_analysis",
+      "display_name": "Scope Analysis",
+      "description": "Estimating exclusion-mapping tool for Todd and Adam. FastAPI + React + ScopeClassificationEngine.",
+      "category": "service",
+      "repo": "TylerBuilds-Official/MFC-ScopeClassificationAPI",
+      "health_url": "https://10.0.0.12:7001/health",
+      "verify_tls": false,
+      "updatesuite_app": "scope_analysis",
+      "tags": ["production"],
+      "docs_paths": []
+    },
+    {
+      "key": "auto_estimate",
+      "display_name": "Auto Estimate",
+      "description": "LaborBidAutomation desktop app — CJP weld hour calculation, labor bid spreadsheet generation. PyQt + Inno Setup installer.",
+      "category": "desktop",
+      "repo": null,
+      "health_url": null,
+      "updatesuite_app": "auto_estimate",
+      "tags": ["production"],
+      "docs_paths": []
+    },
+    {
+      "key": "jobscan",
+      "display_name": "JobScan",
+      "description": "SubScan PyQt6 desktop app — pulls fabrication files by job number and package type.",
+      "category": "desktop",
+      "repo": null,
+      "health_url": null,
+      "updatesuite_app": "jobscan",
+      "tags": ["production"],
+      "docs_paths": []
+    },
+    {
+      "key": "estimator_solutions",
+      "display_name": "Estimator Solutions",
+      "description": "PDF Classifier — C# WPF frontend with Python backend for PDF classification and date extraction.",
+      "category": "desktop",
+      "repo": "TylerBuilds-Official/MFC-Estimating-DesktopClient",
+      "health_url": null,
+      "updatesuite_app": "estimator_solutions",
+      "tags": ["production"],
+      "docs_paths": []
+    },
+    {
+      "key": "updatesuite_api",
+      "display_name": "UpdateSuite API",
+      "description": "Local trigger API for UpdateSuite pipelines. Windows boot service on workstation; DevHub depends on this for all deploys.",
+      "category": "infra",
+      "repo": null,
+      "health_url": "http://localhost:8765/health",
+      "updatesuite_app": null,
+      "tags": ["infra"],
+      "docs_paths": []
+    },
+    {
+      "key": "devhub_api",
+      "display_name": "DevHub API",
+      "description": "This API — backend for the DevHub MFC dev console.",
+      "category": "infra",
+      "repo": null,
+      "health_url": "http://localhost:8766/health",
+      "updatesuite_app": null,
+      "tags": ["infra"],
+      "docs_paths": []
+    }
+  ]
+}

@@ -3,8 +3,8 @@ GET /projects           — full project list from registry.json with cached hea
 GET /projects/{key}     — single project lookup.
 
 Health data is read from dev_hub.ProjectHealthLatest, populated by the
-background health poller (lands in a later phase). Until the poller is
-wired, .health will be None for every project.
+background health poller. Projects with no health_url have .health == None
+permanently.
 """
 from fastapi import APIRouter, HTTPException
 
@@ -39,9 +39,10 @@ def _serialize(entry: ProjectEntry, health: HealthSnapshot | None) -> ProjectInf
         key             = entry.key,
         display_name    = entry.display_name,
         description     = entry.description,
-        repo            = entry.repo,
         category        = entry.category,
+        repo            = entry.repo,
         health_url      = entry.health_url,
+        verify_tls      = entry.verify_tls,
         updatesuite_app = entry.updatesuite_app,
         tags            = entry.tags,
         docs_paths      = entry.docs_paths,

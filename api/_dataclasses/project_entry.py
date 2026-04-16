@@ -7,6 +7,12 @@ key maps to it (if deployable).
 
 health_interval_s is an optional per-project override. When None, the
 poller falls back to the global DEVHUB_HEALTH_INTERVAL_S.
+
+verify_tls toggles httpx cert verification on the health probe. Defaults
+to True; set False for services behind self-signed certs (FabCore).
+
+repo is None when no GitHub repo is configured — the frontend renders
+"no repo linked" rather than a broken link.
 """
 from dataclasses import dataclass, field
 
@@ -18,10 +24,11 @@ class ProjectEntry:
     key:                str
     display_name:       str
     description:        str
-    repo:               str               # github org/repo slug, e.g. "tyler/ScopeAnalysis"
-    category:           str               # "service" | "engine" | "desktop" | "infra"
+    category:           str                      # "service" | "frontend" | "desktop" | "infra"
+    repo:               str | None        = None
     health_url:         str | None        = None
     health_interval_s:  int | None        = None   # per-project override; None = use global
+    verify_tls:         bool              = True   # False for self-signed https endpoints
     updatesuite_app:    str | None        = None
     tags:               list[str]         = field(default_factory=list)
     docs_paths:         list[str]         = field(default_factory=list)

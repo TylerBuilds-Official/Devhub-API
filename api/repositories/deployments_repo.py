@@ -59,7 +59,7 @@ class DeploymentsRepo:
 
     @staticmethod
     def update_status(
-            deploy_id:   UUID,
+            deploy_id:   UUID | str,
             status:      str,
             started_at:  datetime | None  = None,
             finished_at: datetime | None  = None,
@@ -85,7 +85,7 @@ class DeploymentsRepo:
 
 
     @staticmethod
-    def get_by_id(deploy_id: UUID) -> DeployRecord | None:
+    def get_by_id(deploy_id: UUID | str) -> DeployRecord | None:
         """Look up a single deployment row by DeployId."""
 
         sql = """
@@ -104,54 +104,81 @@ class DeploymentsRepo:
         if row is None:
             return None
 
-        return DeployRecord(
-            deploy_id       = str(row[0]),
-            project_key     = row[1],
-            pipeline_key    = row[2],
-            upstream_job_id = row[3],
-            triggered_by    = str(row[4]) if row[4] is not None else "anonymous",
-            params          = json.loads(row[5]) if row[5] else {},
-            status          = row[6],
-            started_at      = row[7],
-            finished_at     = row[8],
-            exit_code       = row[9],
-            log_pointer     = row[10],
-            error           = row[11],
-        )
+        return _row_to_record(row)
 
 
     @staticmethod
-    def list_recent(limit: int = 50) -> list[DeployRecord]:
-        """Return the most recent deployments across all projects."""
+    def get_by_upstream_job_id(upstream_job_id: str) -> DeployRecord | None:
+        """Look up a single deployment row by its upstream job_id."""
 
         sql = """
-            SELECT TOP (?)
-                   DeployId, ProjectKey, PipelineKey, UpstreamJobId, TriggeredBy,
+            SELECT DeployId, ProjectKey, PipelineKey, UpstreamJobId, TriggeredBy,
                    ParamsJson, Status, StartedAt, FinishedAt, ExitCode,
                    LogPointer, ErrorMessage
             FROM   dev_hub.Deployments
-            ORDER BY CreatedAt DESC;
+            WHERE  UpstreamJobId = ?;
         """
 
         with get_connection() as conn:
             cur = conn.cursor()
-            cur.execute(sql, limit)
+            cur.execute(sql, upstream_job_id)
+            row = cur.fetchone()
+
+        if row is None:
+            return None
+
+        return _row_to_record(row)
+
+
+    @staticmethod
+    def list_recent(limit: int = 50, project_key: str | None = None) -> list[DeployRecord]:
+        """Return the most recent deployments, optionally filtered by project."""
+
+        if project_key is None:
+            sql = """
+                SELECT TOP (?)
+                       DeployId, ProjectKey, PipelineKey, UpstreamJobId, TriggeredBy,
+                       ParamsJson, Status, StartedAt, FinishedAt, ExitCode,
+                       LogPointer, ErrorMessage
+                FROM   dev_hub.Deployments
+                ORDER BY CreatedAt DESC;
+            """
+            args = (limit,)
+
+        else:
+            sql = """
+                SELECT TOP (?)
+                       DeployId, ProjectKey, PipelineKey, UpstreamJobId, TriggeredBy,
+                       ParamsJson, Status, StartedAt, FinishedAt, ExitCode,
+                       LogPointer, ErrorMessage
+                FROM   dev_hub.Deployments
+                WHERE  ProjectKey = ?
+                ORDER BY CreatedAt DESC;
+            """
+            args = (limit, project_key)
+
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute(sql, *args)
             rows = cur.fetchall()
 
-        return [
-            DeployRecord(
-                deploy_id       = str(r[0]),
-                project_key     = r[1],
-                pipeline_key    = r[2],
-                upstream_job_id = r[3],
-                triggered_by    = str(r[4]) if r[4] is not None else "anonymous",
-                params          = json.loads(r[5]) if r[5] else {},
-                status          = r[6],
-                started_at      = r[7],
-                finished_at     = r[8],
-                exit_code       = r[9],
-                log_pointer     = r[10],
-                error           = r[11],
-            )
-            for r in rows
-        ]
+        return [_row_to_record(r) for r in rows]
+
+
+def _row_to_record(row) -> DeployRecord:
+    """Map a pyodbc Deployments row to a DeployRecord dataclass."""
+
+    return DeployRecord(
+        deploy_id       = str(row[0]),
+        project_key     = row[1],
+        pipeline_key    = row[2],
+        upstream_job_id = row[3],
+        triggered_by    = str(row[4]) if row[4] is not None else "anonymous",
+        params          = json.loads(row[5]) if row[5] else {},
+        status          = row[6],
+        started_at      = row[7],
+        finished_at     = row[8],
+        exit_code       = row[9],
+        log_pointer     = row[10],
+        error           = row[11],
+    )
