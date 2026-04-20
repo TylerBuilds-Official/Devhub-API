@@ -175,7 +175,6 @@ All seven items in the original order are shipped:
 
 ## Known loose ends (tracked, not blocking)
 
-- `src/pages/ProjectDetailPage.tsx` is orphaned (no route points at it). Safe to delete.
 - DevHub self-monitoring ping is weak (DevHub pings its own `/health`). Works but redundant with the system status strip. Keep or remove `devhub_api` from registry — call later.
 - `verify_tls: True` default bites every time a new HTTPS project is added with a self-signed cert. Default flip is a judgment call.
 - `Deployments` table grows unbounded. Monitor, add retention later.

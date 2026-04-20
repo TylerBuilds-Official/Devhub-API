@@ -21,17 +21,18 @@ Error shape:
 """
 import logging
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from api._models       import LogsResponse
 from api._models.log_models import LogStream
+from api.auth          import get_current_user
 from api.log_reader    import LogFileMissingError, LogFileReadError, tail_file
 from api.registry      import get_project
 
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(tags=["logs"])
+router = APIRouter(tags=["logs"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/projects/{key}/logs", response_model=LogsResponse)

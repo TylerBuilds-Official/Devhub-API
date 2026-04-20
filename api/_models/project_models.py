@@ -32,6 +32,7 @@ class ProjectInfo(BaseModel):
     docs_paths:         list[str]                        = []
     logs:               dict[str, dict[str, str]] | None = None
     health:             ProjectHealth | None             = None
+    last_deploy_at:     datetime | None                  = None   # FinishedAt of most recent successful deploy
 
 
 class ProjectsResponse(BaseModel):

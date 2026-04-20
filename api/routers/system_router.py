@@ -10,15 +10,16 @@ import time
 
 from datetime import datetime
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 
 from api._models import SystemStatus, UpstreamCheck
+from api.auth    import get_current_user
 from api.db      import ping as db_ping
 
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(tags=["system"])
+router = APIRouter(tags=["system"], dependencies=[Depends(get_current_user)])
 
 
 async def _check_updatesuite(client) -> UpstreamCheck:

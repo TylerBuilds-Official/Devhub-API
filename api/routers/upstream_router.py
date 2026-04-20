@@ -5,10 +5,12 @@ Single-origin pattern — the frontend talks only to DevHub so there's
 one base URL, one CORS config, one future auth story. DevHub forwards
 to UpdateSuite when the data lives there.
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
+
+from api.auth import get_current_user
 
 
-router = APIRouter(tags=["upstream"])
+router = APIRouter(tags=["upstream"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/upstream/apps")

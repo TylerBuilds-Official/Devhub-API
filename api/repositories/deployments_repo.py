@@ -29,7 +29,7 @@ class DeploymentsRepo:
             project_key:     str,
             pipeline_key:    str,
             upstream_job_id: str,
-            triggered_by:    int | None,
+            triggered_by:    str | None,
             params:          dict,
             status:          str = "queued" ) -> UUID:
         """Insert a new deployment row; returns the generated DeployId."""
@@ -106,6 +106,32 @@ class DeploymentsRepo:
             return None
 
         return _row_to_record(row)
+
+
+    @staticmethod
+    def get_latest_success_per_project() -> dict[str, datetime]:
+        """Return a dict of latest SUCCESSFUL deploy FinishedAt keyed by project.
+
+        Used by GET /projects to show 'last deployed' timestamps on the
+        dashboard for apps without a live health probe (desktop apps).
+        Excludes failed/cancelled deploys — a failed deploy isn't a
+        current build.
+        """
+
+        sql = """
+            SELECT   ProjectKey, MAX(FinishedAt) AS LastSuccess
+            FROM     dev_hub.Deployments
+            WHERE    Status     = 'success'
+              AND    FinishedAt IS NOT NULL
+            GROUP BY ProjectKey;
+        """
+
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute(sql)
+            rows = cur.fetchall()
+
+        return {row[0]: row[1] for row in rows}
 
 
     @staticmethod

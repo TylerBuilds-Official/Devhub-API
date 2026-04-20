@@ -16,7 +16,7 @@ class DeployRecord:
     project_key:       str
     pipeline_key:      str
     upstream_job_id:   str
-    triggered_by:      str                # AD user once auth is wired; "anonymous" for now
+    triggered_by:      str                # email from the authenticated JWT; "anonymous" for legacy pre-auth rows
     params:            dict               = field(default_factory=dict)
     status:            str                = "queued"
     started_at:        datetime | None    = None

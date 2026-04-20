@@ -11,9 +11,10 @@ Flow:
 DeployId is DevHub-owned and durable; upstream_job_id is the upstream
 pointer used for polling status and logs.
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from api._models        import DeployRequest, DeployResponse
+from api.auth           import AuthenticatedUser, require_admin
 from api.registry       import get_project
 from api.repositories   import DeploymentsRepo
 
@@ -22,7 +23,10 @@ router = APIRouter(tags=["deploys"])
 
 
 @router.post("/deploys", response_model=DeployResponse)
-async def trigger_deploy(payload: DeployRequest, request: Request) -> DeployResponse:
+async def trigger_deploy(
+        payload: DeployRequest,
+        request: Request,
+        user:    AuthenticatedUser = Depends(require_admin) ) -> DeployResponse:
     """Kick off a deploy by proxying to UpdateSuiteAPI and auditing it."""
 
     project = get_project(payload.project_key)
@@ -54,7 +58,7 @@ async def trigger_deploy(payload: DeployRequest, request: Request) -> DeployResp
         project_key     = payload.project_key,
         pipeline_key    = payload.pipeline_key,
         upstream_job_id = upstream_job_id,
-        triggered_by    = None,              # will be AD user id once auth lands
+        triggered_by    = user.email,
         params          = payload.params,
         status          = status,
     )

@@ -12,17 +12,18 @@ the list get corrected the moment anyone opens their detail view.
 """
 import logging
 
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from api._dataclasses.deploy_record import DeployRecord
 from api._models                    import JobDetail, JobLogResponse, JobSummary, JobsResponse
+from api.auth                       import get_current_user
 from api.deploy_reconciler          import reconcile
 from api.repositories               import DeploymentsRepo
 
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(tags=["jobs"])
+router = APIRouter(tags=["jobs"], dependencies=[Depends(get_current_user)])
 
 
 def _record_to_summary(record: DeployRecord, upstream: dict | None = None) -> JobSummary:

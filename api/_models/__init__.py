@@ -22,6 +22,15 @@ from api._models.system_models  import (
 from api._models.log_models     import (
     LogsResponse,
 )
+from api._models.me_models      import (
+    MeResponse,
+)
+from api._models.user_models    import (
+    UserRoleInfo,
+    UserRolesResponse,
+    CreateUserRequest,
+    UpdateUserRequest,
+)
 
 
 __all__ = [
@@ -37,4 +46,9 @@ __all__ = [
     "SystemStatus",
     "UpstreamCheck",
     "LogsResponse",
+    "MeResponse",
+    "UserRoleInfo",
+    "UserRolesResponse",
+    "CreateUserRequest",
+    "UpdateUserRequest",
 ]
