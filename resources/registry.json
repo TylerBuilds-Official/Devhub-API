@@ -95,6 +95,7 @@
       "category": "infra",
       "repo": null,
       "health_url": "https://10.0.0.12:8001/health",
+      "verify_tls": false,
       "updatesuite_app": null,
       "tags": ["infra"],
       "docs_paths": [],
