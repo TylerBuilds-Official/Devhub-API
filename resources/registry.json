@@ -83,7 +83,7 @@
       "description": "Local trigger API for UpdateSuite pipelines. Windows boot service on workstation; DevHub depends on this for all deploys.",
       "category": "infra",
       "repo": null,
-      "health_url": "http://localhost:8765/health",
+      "health_url": "http://localhost:2002/health",
       "updatesuite_app": null,
       "tags": ["infra"],
       "docs_paths": []

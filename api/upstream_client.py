@@ -13,7 +13,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-UPDATESUITE_BASE_URL = os.getenv("UPDATESUITE_BASE_URL", "http://localhost:8765")
+UPDATESUITE_BASE_URL = os.getenv("UPDATESUITE_BASE_URL", "http://localhost:2002")
 UPDATESUITE_TIMEOUT  = float(os.getenv("UPDATESUITE_TIMEOUT", "10.0"))
 
 
