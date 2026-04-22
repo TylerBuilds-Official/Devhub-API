@@ -83,7 +83,7 @@
       "description": "Local trigger API for UpdateSuite pipelines. Windows boot service on workstation; DevHub depends on this for all deploys.",
       "category": "infra",
       "repo": null,
-      "health_url": "http://localhost:2002/health",
+      "health_url": "http://10.0.59.72:2002/health",
       "updatesuite_app": null,
       "tags": ["infra"],
       "docs_paths": []
@@ -94,14 +94,14 @@
       "description": "This API — backend for the DevHub MFC dev console.",
       "category": "infra",
       "repo": null,
-      "health_url": "http://localhost:8766/health",
+      "health_url": "https://10.0.0.12:8001/health",
       "updatesuite_app": null,
       "tags": ["infra"],
       "docs_paths": [],
       "logs": {
         "api": {
-          "stdout": "D:\\Projects\\PyCharmProjects\\Global APIs\\DevHubAPI\\test_logs\\stdout.log",
-          "stderr": "D:\\Projects\\PyCharmProjects\\Global APIs\\DevHubAPI\\test_logs\\stderr.log"
+          "stdout": "E:\\Services\\DevHub\\API\\logs\\stdout.log",
+          "stderr": "E:\\Services\\DevHub\\API\\logs\\stderr.log"
         }
       }
     }
