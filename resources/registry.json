@@ -91,7 +91,7 @@
     {
       "key": "devhub",
       "display_name": "DevHub",
-      "description": "This dashboard — DevHub MFC dev console. FastAPI backend + React/Vite frontend, deployed as NSSM services on the VM.",
+      "description": "This dashboard: The DevHub MFC dev console. FastAPI backend + React/Vite frontend, deployed as NSSM services on the VM.",
       "category": "infra",
       "repo": null,
       "health_url": "https://10.0.0.12:8001/health",
