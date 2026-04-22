@@ -85,7 +85,7 @@
       "repo": null,
       "health_url": "http://10.0.59.72:2002/health",
       "updatesuite_app": null,
-      "tags": ["infra"],
+      "tags": [],
       "docs_paths": []
     },
     {
@@ -97,7 +97,7 @@
       "health_url": "https://10.0.0.12:8001/health",
       "verify_tls": false,
       "updatesuite_app": "devhub",
-      "tags": ["infra"],
+      "tags": [],
       "docs_paths": [],
       "logs": {
         "api": {
